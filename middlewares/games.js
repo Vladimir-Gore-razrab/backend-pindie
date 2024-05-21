@@ -1,8 +1,23 @@
-const game = require("../models/games")
+const game = require("../models/game")
 
 const findAllGames = async (req, res, next) => {
-    req.gamesArray = await game.find({});
+    console.log('GET /games');
+    req.gamesArray = await game.find({})
+    .populate('categories')
+    .populate({
+        path: 'users',
+        select: '-password'
+    });
     next();
 }
 
-module.exports = findAllGames;
+const createGame = async (req, res, next) => {
+    try {
+        req.game = await games.create(req.body); 
+        next()
+    } catch (err) {
+      res.status(400).send({massage: 'Ошибка при создании игры'})
+    }
+}
+
+module.exports = {findAllGames, createGame};
