@@ -1,4 +1,4 @@
-const game = require("../models/game")
+const game = require("../models/games")
 
 const findAllGames = async (req, res, next) => {
     req.gamesArray = await game.find({});
