@@ -15,12 +15,42 @@ const findUserById = async (req, res, next) => {
 }
 
 const createUser = async (req, res, next) => {
+  console.log("POST /users");
   try {
+    console.log(req.body);
     req.user = await users.create(req.body);
     next();
   } catch (error) {
+    res.setHeader("Content-Type", "application/json");
         res.status(400).send(JSON.stringify({ message: "Ошибка создания пользователя" }));
   }
-};
+}
 
-module.exports = {findAllUsers, findUserById, createUser};
+const updateUser = async (req, res, next) => {
+  try {
+    req.user = await users.findByIdAndUpdate(req.params.id, req.body);
+    next();
+  } catch (error) {
+        res.status(400).send(JSON.stringify({ message: "Error updating user" }));
+  }
+}
+
+const checkEmptyNameAndEmail = async (req, res, next) => {
+  if (!req.body.username || !req.body.email) {
+    res.status(400).send({message: 'Введите название категории'})
+  } else {
+    next();
+  }
+}
+
+const deleteUser = async (req, res, next) => {
+  try {
+    req.user = await users.findByIdAndDelete(req.params.id);
+    next();
+  } catch (error) {
+        res.status(400).send(JSON.stringify({ message: "Error deleting user" }));
+  }
+}
+
+
+module.exports = {findAllUsers, findUserById, createUser, updateUser, checkEmptyNameAndEmail, deleteUser};
