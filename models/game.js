@@ -25,14 +25,18 @@ const gameSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  users:{
+  users: [
+  {
     type: mongoose.Schema.Types.ObjectId,
     ref: userModel
-  },
-  categories: {
+  }
+  ],
+  categories: [ 
+  {
     type: mongoose.Schema.Types.ObjectId,
     ref: categoryModel
   }
+]
 });
 
 module.exports = mongoose.model('game', gameSchema);
